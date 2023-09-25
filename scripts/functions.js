@@ -1259,8 +1259,8 @@ function refreshQuickBooksToken() {
         },
         authorization: {
             type: "basic",
-            username: config.get("accessToken"),
-            password: config.get("refreshToken")
+            username: config.get("clientId"),
+            password: config.get("clientSecret")
         }
     });
     config.set("accessToken", refreshTokenResponse.accessToken);
