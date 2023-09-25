@@ -1236,7 +1236,7 @@ function setApiUri(options) {
 }
 function setRequestHeaders(options) {
     var headers = options.headers || {};
-    headers = mergeJSON(headers, {"Authorization": "Bearer" + config.get("accessToken")});
+    headers = mergeJSON(headers, {"Authorization": "Bearer " + config.get("accessToken")});
     headers = mergeJSON(headers, {"Content-Type": "application/json"});
     headers = mergeJSON(headers, {"Accept": "application/json"});
 
