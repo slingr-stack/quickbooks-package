@@ -1245,7 +1245,7 @@ function setRequestHeaders(options) {
 }
 
 function refreshQuickBooksToken() {
-    var refreshTokenResponse = svc.http.post({
+    var refreshTokenResponse = dependencies.http.post({
         url: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
         headers: {
             "Accept": "application/json",
