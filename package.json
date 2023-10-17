@@ -95,27 +95,27 @@
     "metadata": [
         {
             "type": "script",
-            "namespace": "api",
+            "namespace": "functions",
             "path": "/scripts/functions.js"
         },
         {
             "type": "flowStep",
-            "namespace": "steps",
+            "namespace": "apiCallQuickbooks",
             "path": "/flowSteps/apiCallQuickbooks"
         },
         {
             "type": "flowStep",
-            "namespace": "steps",
+            "namespace": "createAccountQuickbooks",
             "path": "/flowSteps/createAccountQuickbooks"
         },
         {
             "type": "flowStep",
-            "namespace": "steps",
+            "namespace": "getAllBillsQuickbooks",
             "path": "/flowSteps/getAllBillsQuickbooks"
         },
         {
             "type": "flowStep",
-            "namespace": "steps",
+            "namespace": "createCustomerQuickbooks",
             "path": "/flowSteps/createCustomerQuickbooks"
         }
     ]
