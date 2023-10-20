@@ -1264,12 +1264,7 @@ function refreshQuickBooksToken() {
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: {
-            client_id: config.get("clientId"),
-            client_secret: config.get("clientSecret"),
-            grant_type: "refresh_token",
-            refresh_token: config.get("refreshToken")
-        },
+        body: "grant_type=refresh_token&refresh_token=" + config.get("refreshToken"),
         authorization: {
             type: "basic",
             username: config.get("clientId"),
