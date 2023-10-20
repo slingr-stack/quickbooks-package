@@ -47,7 +47,7 @@
             "required": true,
             "defaultValue": "SANDBOX",
             "typeOptions": {
-                "allowCustom": true,
+                "allowCustom": false,
                 "possibleValues": [
                     {
                         "label": "Sandbox",
@@ -58,6 +58,16 @@
                         "name": "PRODUCTION"
                     }
                 ]
+            }
+        },
+        {
+            "name": "minorVersion",
+            "label": "Minor Version",
+            "description": "The QuickBooks Online API supports minor versions in order to provide a way for you to access incremental changes without breaking existing apps.",
+            "defaultValue": 69,
+            "type": "text",
+            "typeOptions": {
+                "validation": "number"
             }
         },
         {

@@ -1227,11 +1227,11 @@ var Quickbooks = function (options) {
  ****************************************************/
 
 function setApiUri(options) {
-    var QUICKBOOKS_API_BASE_URL = "https://api.intuit.com/quickbooks/v4";
-    var QUICKBOOKS_API_BASE_URL_SANDBOX = "https://sandbox.api.intuit.com/quickbooks/v4";
+    var QUICKBOOKS_API_BASE_URL = "https://quickbooks.api.intuit.com/v3";
+    var QUICKBOOKS_API_BASE_URL_SANDBOX = "https://sandbox-quickbooks.api.intuit.com/v3";
     var API_URL = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKS_API_BASE_URL : QUICKBOOKS_API_BASE_URL_SANDBOX;
     var url = options.path || "";
-    options.url = API_URL + url;
+    options.url = concatQuery(API_URL + url, "minorVersion", config.get("minorVersion"));
     sys.logs.debug('[quickbooks] Set url: ' + options.path + "->" + options.url);
     return options;
 }
@@ -1251,7 +1251,7 @@ function setAuthorization(options) {
     authorization = mergeJSON(authorization, {
         type: "oauth2",
         accessToken: config.get("accessToken"),
-        headerPrefix: "bearer"
+        headerPrefix: "Bearer"
     });
     options.authorization = authorization;
     return options;
