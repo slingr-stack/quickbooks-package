@@ -92,7 +92,7 @@
             "name": "QUICKBOOKS_API_BASE_URL",
             "label": "Quickbooks Api Url",
             "type": "label",
-            "value": "https://api.intuit.com/quickbooks/v4"
+            "value": "https://quickbooks.api.intuit.com/v3"
         }
     ],
     "events": [
