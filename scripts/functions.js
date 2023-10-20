@@ -1258,7 +1258,7 @@ function setAuthorization(options) {
 }
 
 function refreshQuickBooksToken() {
-    var refreshTokenResponse = dependencies.http.post({
+    var refreshTokenResponse = httpService.post({
         url: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
         headers: {
             "Accept": "application/json",
@@ -1276,7 +1276,8 @@ function refreshQuickBooksToken() {
             password: config.get("clientSecret")
         }
     });
-    config.set("accessToken", refreshTokenResponse.accessToken);
+    sys.logs.debug('[quickbooks] Refresh token response: ' + JSON.stringify(refreshTokenResponse));
+    config.set("accessToken", refreshTokenResponse.access_token);
 }
 
 function mergeJSON (json1, json2) {
