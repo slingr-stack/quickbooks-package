@@ -1272,8 +1272,8 @@ function refreshQuickBooksToken() {
         }
     });
     sys.logs.debug('[quickbooks] Refresh token response: ' + JSON.stringify(refreshTokenResponse));
-    config.set("accessToken", refreshTokenResponse.access_token);
-    config.set("refreshToken", refreshTokenResponse.refresh_token);
+    _config.set("accessToken", refreshTokenResponse.access_token);
+    _config.set("refreshToken", refreshTokenResponse.refresh_token);
 }
 
 function mergeJSON (json1, json2) {
