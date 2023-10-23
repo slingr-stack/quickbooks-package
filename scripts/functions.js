@@ -1264,7 +1264,7 @@ function refreshQuickBooksToken() {
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: "grant_type=refresh_token&refresh_token=" + config.get("refreshToken"),
+        body: {"grant_type":"refresh_token","refresh_token" : config.get("refreshToken")},
         authorization: {
             type: "basic",
             username: config.get("clientId"),
@@ -1273,6 +1273,7 @@ function refreshQuickBooksToken() {
     });
     sys.logs.debug('[quickbooks] Refresh token response: ' + JSON.stringify(refreshTokenResponse));
     config.set("accessToken", refreshTokenResponse.access_token);
+    config.set("refreshToken", refreshTokenResponse.refresh_token);
 }
 
 function mergeJSON (json1, json2) {
