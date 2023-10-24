@@ -1157,6 +1157,7 @@ exports.utils.verifySignature = function (body, signature) {
  Private helpers
  ****************************************************/
 
+var init = true;
 
 var concatQuery = function (url, key, value) {
     return url + ((!url || url.indexOf('?') < 0) ? '?' : '&') + key + "=" + value;
@@ -1215,6 +1216,7 @@ var parse = function (str) {
  ****************************************************/
 
 var Quickbooks = function (options) {
+    if (init) { refreshQuickBooksToken(); init= false;}
     options = options || {};
     options= setApiUri(options);
     options= setRequestHeaders(options);
