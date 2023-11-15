@@ -150,7 +150,7 @@ function setAuthorization(options) {
 }
 
 function mergeJSON (json1, json2) {
-	const result = {};
+	var result = {};
 	let key;
 	for (key in json1) {
 		if(json1.hasOwnProperty(key)) result[key] = json1[key];
