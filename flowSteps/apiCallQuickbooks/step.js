@@ -160,3 +160,7 @@ function mergeJSON (json1, json2) {
 	}
 	return result;
 }
+
+function concatQuery (path, key, value) {
+	return path + ((!path || path.indexOf('?') < 0) ? '?' : '&') + key + "=" + value;
+}
