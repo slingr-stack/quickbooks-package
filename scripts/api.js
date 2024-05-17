@@ -274,7 +274,10 @@ let stringType = Function.prototype.call.bind(Object.prototype.toString)
 let init = true;
 
 let Quickbooks = function (options) {
-    if (init) { refreshQuickBooksToken(); init= false;}
+    if (init) {
+        refreshQuickBooksToken();
+        init= false;
+    }
     options = options || {};
     options= setApiUri(options);
     options= setRequestHeaders(options);
@@ -310,7 +313,7 @@ function setAuthorization(options) {
     let authorization = options.authorization || {};
     authorization = mergeJSON(authorization, {
         type: "oauth2",
-        accessToken: config.get("accessToken"),
+        accessToken: sys.storage.get('accessToken-QuickBooks', {decrypt:true}),
         headerPrefix: "Bearer"
     });
     options.authorization = authorization;
@@ -318,13 +321,14 @@ function setAuthorization(options) {
 }
 
 function refreshQuickBooksToken() {
+    const refreshTokenFromStorage = sys.storage.get('refreshToken-QuickBooks', {decrypt:true});
     let refreshTokenResponse = httpService.post({
         url: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
         headers: {
             "Accept": "application/json",
             "Content-Type": "application/x-www-form-urlencoded"
         },
-        body: {"grant_type":"refresh_token","refresh_token" : config.get("refreshToken")},
+        body: {"grant_type":"refresh_token","refresh_token" : refreshTokenFromStorage === undefined ? config.get("refreshToken") : refreshTokenFromStorage},
         authorization: {
             type: "basic",
             username: config.get("clientId"),
@@ -332,8 +336,8 @@ function refreshQuickBooksToken() {
         }
     });
     sys.logs.debug('[quickbooks] Refresh token response: ' + JSON.stringify(refreshTokenResponse));
-    _config.set("accessToken", refreshTokenResponse.access_token);
-    _config.set("refreshToken", refreshTokenResponse.refresh_token);
+    sys.storage.put('accessToken-QuickBooks', refreshTokenResponse.access_token, {encrypt:true});
+    sys.storage.put('refreshToken-QuickBooks', refreshTokenResponse.refresh_token, {encrypt:true});
 }
 
 function mergeJSON (json1, json2) {
