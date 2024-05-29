@@ -20,12 +20,19 @@ let httpService = {};
  *
  * Handles a request with retry from the platform side.
  */
-function handleRequestWithRetry(requestFn, options, callbackData, callbacks) {
+function handleRequestWithRetry(requestFn, options, callbackData, callbacks, retry) {
     try {
         return requestFn(options, callbackData, callbacks);
     } catch (error) {
-        sys.logs.info("[quickbooks] Handling request "+JSON.stringify(error));
-        refreshQuickBooksToken();
+        if (!retry) {
+            sys.logs.info("[quickbooks] Handling request " + JSON.stringify(error));
+            refreshQuickBooksToken();
+        } else {
+            throw error;
+        }
+    }
+    if (!retry) {
+        return handleRequestWithRetry(requestFn, options, callbackData, callbacks, true);
     }
 }
 
@@ -234,6 +241,12 @@ exports.utils.verifySignature = function (body, signature, signature256) {
 
     return (verified || verified256);
 };
+
+exports.utils.clearTokensFromStorage = function () {
+    sys.logs.warn("Clearing token from storage.");
+    sys.storage.remove('accessToken-QuickBooks');
+    sys.storage.remove('refreshToken-QuickBooks');
+}
 
 /****************************************************
  Private helpers
