@@ -32,7 +32,8 @@ function handleRequestWithRetry(requestFn, options, callbackData, callbacks, ret
         }
     }
     if (!retry) {
-        return handleRequestWithRetry(requestFn, options, callbackData, callbacks, true);
+        options.retry = !retry;
+        return handleRequestWithRetry(requestFn, Quickbooks(options), callbackData, callbacks, true);
     }
 }
 
@@ -284,12 +285,10 @@ let stringType = Function.prototype.call.bind(Object.prototype.toString)
  Configurator
  ****************************************************/
 
-let init = true;
-
 let Quickbooks = function (options) {
-    if (init) {
+    if (sys.storage.get('init-Quickbooks', {decrypt:true}) === undefined) {
         refreshQuickBooksToken();
-        init= false;
+        sys.storage.put('init-Quickbooks', true, {encrypt: true});
     }
     options = options || {};
     options= setApiUri(options);
@@ -323,7 +322,7 @@ function setRequestHeaders(options) {
 
 function setAuthorization(options) {
     sys.logs.debug('[quickbooks] Setting header token oauth');
-    let authorization = options.authorization || {};
+    let authorization = (options.retry ? {} : options.authorization) || {};
     authorization = mergeJSON(authorization, {
         type: "oauth2",
         accessToken: sys.storage.get('accessToken-QuickBooks', {decrypt:true}),
