@@ -41,7 +41,7 @@
             "required": true,
             "defaultValue": "SANDBOX",
             "typeOptions": {
-                "allowCustom": false,
+                "allowCustom": true,
                 "possibleValues": [
                     {
                         "label": "Sandbox",
