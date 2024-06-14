@@ -306,7 +306,22 @@ function setApiUri(options) {
     let QUICKBOOKS_API_BASE_URL_SANDBOX = "https://sandbox-quickbooks.api.intuit.com/v3";
     let API_URL = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKS_API_BASE_URL : QUICKBOOKS_API_BASE_URL_SANDBOX;
     let url = options.path || "";
-    options.url = concatQuery(API_URL + "/company/" + config.get("companyId") + url, "minorVersion", config.get("minorVersion"));
+    if (options.params) {
+        for (let key in options.params) {
+            if (key.toLowerCase() === 'minorversion') {
+                options.params.minorversion = options.params[key];
+                delete options.params[key];
+            }
+        }
+    }
+
+    let minorversion = options.params && options.params.minorversion;
+
+    if (minorversion !== undefined) {
+        options.url = concatQuery(API_URL + "/company/" + config.get("companyId") + url, "minorversion", minorversion);
+    } else {
+        options.url = concatQuery(API_URL + "/company/" + config.get("companyId") + url, "minorversion", config.get("minorversion"));
+    }
     sys.logs.debug('[quickbooks] Set url: ' + options.path + "->" + options.url);
     return options;
 }

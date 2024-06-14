@@ -55,7 +55,7 @@
             }
         },
         {
-            "name": "minorVersion",
+            "name": "minorversion",
             "label": "Minor Version",
             "description": "The QuickBooks Online API supports minor versions in order to provide a way for you to access incremental changes without breaking existing apps.",
             "defaultValue": 69,
