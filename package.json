@@ -1,6 +1,6 @@
 {
     "name": "quickbooks",
-    "label": "Quickbooks Package",
+    "label": "Quickbooks",
     "dependencies": [
         {
             "type": "service",
@@ -11,32 +11,32 @@
     ],
     "configuration": [
         {
-            "name": "clientId",
             "label": "Client ID",
+            "name": "clientId",
             "type": "text",
             "required": true
         },
         {
-            "name": "clientSecret",
             "label": "Client Secret",
-            "type": "text",
+            "name": "clientSecret",
+            "type": "password",
             "required": true
         },
         {
-            "name": "companyId",
             "label": "Company ID",
+            "name": "companyId",
             "type": "text",
             "required": true
         },
         {
-            "name": "refreshToken",
             "label": "Refresh Token",
+            "name": "refreshToken",
             "type": "text",
             "required": true
         },
         {
-            "name": "quickBooksEnvironment",
-            "label": "QuickBooks environment",
+            "label": "QuickBooks Environment",
+            "name": "quickbooksEnvironment",
             "type": "buttonsGroup",
             "required": true,
             "defaultValue": "SANDBOX",
@@ -45,18 +45,18 @@
                 "possibleValues": [
                     {
                         "label": "Sandbox",
-                        "name": "SANDBOX"
+                        "name": "sandbox"
                     },
                     {
                         "label": "Production",
-                        "name": "PRODUCTION"
+                        "name": "production"
                     }
                 ]
             }
         },
         {
-            "name": "minorversion",
             "label": "Minor Version",
+            "name": "minorVersion",
             "description": "The QuickBooks Online API supports minor versions in order to provide a way for you to access incremental changes without breaking existing apps.",
             "defaultValue": 69,
             "type": "text",
@@ -65,26 +65,20 @@
             }
         },
         {
-            "name": "verifierToken",
             "label": "Webhooks Verifier Token",
+            "name": "webhooksVerifierToken",
             "type": "text",
             "required": false
         },
         {
-            "name": "configuration",
-            "label": "Configuration",
-            "value": "To obtain the requested fields for configuration you need to log in to your intuit developer account and go to <a href='https://developer.intuit.com/v2/ui#/playground' target='_blank'>Test connect to app (OAuth)</a>. On this page you need to: <ul><li>Complete the form selecting the app you want to configure on the endpoint.</li><li>Once you select the app the Client ID and Client Secret fields are being populated. You can copy this values to the endpoint configuration.</li><li>Select the Scopes (Accounting is the only available for now).</li><li>Click on Get authorization code and authorize the app.</li><li>Then click on Get Tokens button.</li><li>Once you have the Tokens you can start making calls to the API. On this screen you need to access to the step 4 and copy the Access Token and the Refresh Token to the endpoint configuration.</li></ul>",
-            "type": "info"
-        },
-        {
-            "name": "webhook",
             "label": "Webhook URL",
+            "name": "webhookUrl",
             "type": "label",
             "value": "@config.WEBHOOK_URL"
         },
         {
-            "name": "QUICKBOOKS_API_BASE_URL",
-            "label": "Quickbooks Api Url",
+            "label": "Quickbooks API URL",
+            "name": "quickbooksBaseUrl",
             "type": "label",
             "value": "https://quickbooks.api.intuit.com/v3"
         }
@@ -93,7 +87,7 @@
         {
             "label": "Webhook",
             "name": "webhook",
-            "description": "Notifications from QuickBooks about entities"
+            "description": "When a webhook arrives from QuickBooks"
         }
     ],
     "metadata": [
@@ -103,24 +97,9 @@
             "path": "/scripts/api.js"
         },
         {
-            "type": "flowStep",
-            "namespace": "apiCallQuickbooks",
-            "path": "/flowSteps/apiCallQuickbooks"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "createAccountQuickbooks",
-            "path": "/flowSteps/createAccountQuickbooks"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "getAllBillsQuickbooks",
-            "path": "/flowSteps/getAllBillsQuickbooks"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "createCustomerQuickbooks",
-            "path": "/flowSteps/createCustomerQuickbooks"
+            "type": "script",
+            "namespace": "utils",
+            "path": "/scripts/utils.js"
         }
     ]
 }
