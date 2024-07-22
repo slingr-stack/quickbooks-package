@@ -32,7 +32,6 @@ function handleRequestWithRetry(requestFn, options, callbackData, callbacks, ret
         }
     }
     if (!retry) {
-        options.retry = !retry;
         return handleRequestWithRetry(requestFn, Quickbooks(options), callbackData, callbacks, true);
     }
 }
@@ -197,9 +196,9 @@ let Quickbooks = function (options) {
         sys.storage.put('quickbooks-init', true, {encrypt: true});
     }
     options = options || {};
-    options= setApiUri(options);
-    options= setRequestHeaders(options);
-    options= setAuthorization(options);
+    options = setApiUri(options);
+    options = setRequestHeaders(options);
+    options = setAuthorization(options);
     return options;
 }
 
