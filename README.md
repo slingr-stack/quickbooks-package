@@ -7,7 +7,7 @@ QuickBooks is accounting software designed for small and medium-sized businesses
 The QuickBooks package has the following features:
 
 - Authentication for the QuickBooks API
-- Shortcuts to access the QuickBooks API
+- Shortcuts to access the QuickBooks Online API and QuickBooks Payments API
 - Support for webhooks
 
 In most cases, you will be using the provided shortcuts to access the API. For example, you could use the API directly by doing an HTTP request like this:
@@ -103,6 +103,15 @@ let response = pkg.quickbooks.api.post({
 ```
 
 The package automatically handles authentication, so no need to worry about that.
+
+Additionally, the package handles calls to QuickBooks Online API and QuickBooks Payments API. Based on the path, the package will decide if the request has to be made to `https://quickbooks.api.intuit.com/v3` (QuickBooks Online) or `https://api.intuit.com/quickbooks/v4` (QuickBooks Payments). For example, if you want to call QuickBooks Payments, it will look the same:
+
+```js
+let response = pkg.quickbooks.api.post({
+    path: `/customers/${customerId}/cards`,
+    body: creditCardInfo
+});
+```
 
 For more information about making HTTP calls, please refer to the documentation of the [HTTP service](https://github.com/slingr-stack/http-service).
 
