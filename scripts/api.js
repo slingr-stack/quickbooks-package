@@ -148,11 +148,11 @@ exports.options = function(path, httpOptions, callbackData, callbacks) {
     return httpService.options(Quickbooks(options), callbackData, callbacks);
 };
 
-exports.utils.clearTokensFromStorage = function () {
+exports.clearTokensFromStorage = function () {
     sys.logs.warn("[quickbooks] Clearing token from storage.");
     sys.storage.remove('quickbooks-access-token');
     sys.storage.remove('quickbooks-refresh-token');
-}
+};
 
 /****************************************************
  Private helpers
