@@ -24,8 +24,8 @@ function handleRequestWithRetry(requestFn, options, callbackData, callbacks, ret
     try {
         return requestFn(options, callbackData, callbacks);
     } catch (error) {
-        if (!retry) {
-            sys.logs.info("[quickbooks] Handling request " + JSON.stringify(error));
+        if (!retry && error.additionalInfo && error.additionalInfo.status === 401) {
+            sys.logs.info("[quickbooks] Refreshing token for request " + options.path);
             refreshQuickBooksToken();
         } else {
             throw error;
