@@ -39,7 +39,7 @@
             "name": "quickbooksEnvironment",
             "type": "buttonsGroup",
             "required": true,
-            "defaultValue": "SANDBOX",
+            "defaultValue": "sandbox",
             "typeOptions": {
                 "allowCustom": true,
                 "possibleValues": [
