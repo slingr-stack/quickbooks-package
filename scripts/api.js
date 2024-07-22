@@ -149,73 +149,10 @@ exports.options = function(path, httpOptions, callbackData, callbacks) {
     return httpService.options(Quickbooks(options), callbackData, callbacks);
 };
 
-exports.utils = {
-
-    /**
-     * Converts a given date to a timestamp.
-     *
-     * @param {number | string} params      - The date to be converted.
-     * @return {object}                     - An object containing the timestamp.
-     */
-    fromDateToTimestamp: function(params) {
-        if (!!params) {
-            return {timestamp: new Date(params).getTime()};
-        }
-        return null;
-    },
-
-    /**
-     * Converts a timestamp to a date object.
-     *
-     * @param {number} timestamp            - The timestamp to convert.
-     * @return {object}                     - The date object representing the timestamp.
-     */
-    fromTimestampToDate: function(timestamp) {
-        return new Date(timestamp);
-    },
-
-    /**
-     * Gets a configuration from the properties.
-     *
-     * @param {string} property             - The name of the property to get.
-     *                                          If it is empty, return the entire configuration object.
-     * @return {string}                     - The value of the property or the whole object as string.
-     */
-    getConfiguration: function (property) {
-        if (!property) {
-            sys.logs.debug('[quickbooks] Get configuration');
-            return JSON.stringify(config.get());
-        }
-        sys.logs.debug('[quickbooks] Get property: '+property);
-        return config.get(property);
-    },
-
-    /**
-     * Concatenates a path with a param query and its value.
-     *
-     * @param path                          - The path to concatenate.
-     * @param key                           - The name of the param.
-     * @param value                         - The value of the param.
-     * @returns {string}                    - The concatenated path without coding parameters.
-     */
-    concatQuery: function (path, key, value) {
-        return path + ((!path || path.indexOf('?') < 0) ? '?' : '&') + key + "=" + value;
-    },
-
-    /**
-     * Merges two JSON objects into a single object.
-     *
-     * @param {Object} json1 - The first JSON object to be merged.
-     * @param {Object} json2 - The second JSON object to be merged.
-     * @return {Object} - The merged JSON object.
-     */
-    mergeJSON: mergeJSON,
-};
-
 exports.utils.clearTokensFromStorage = function () {
     sys.logs.warn("[quickbooks] Clearing token from storage.");
-    sys.storage.remove('accessToken-QuickBooks');
-    sys.storage.remove('refreshToken-QuickBooks');
+    sys.storage.remove('quickbooks-access-token');
+    sys.storage.remove('quickbooks-refresh-token');
 }
 
 /****************************************************
@@ -255,9 +192,9 @@ let stringType = Function.prototype.call.bind(Object.prototype.toString)
  ****************************************************/
 
 let Quickbooks = function (options) {
-    if (sys.storage.get('init-Quickbooks', {decrypt:true}) === undefined) {
+    if (sys.storage.get('quickbooks-init', {decrypt:true}) === undefined) {
         refreshQuickBooksToken();
-        sys.storage.put('init-Quickbooks', true, {encrypt: true});
+        sys.storage.put('quickbooks-init', true, {encrypt: true});
     }
     options = options || {};
     options= setApiUri(options);
@@ -271,25 +208,33 @@ let Quickbooks = function (options) {
  ****************************************************/
 
 function setApiUri(options) {
-    let QUICKBOOKS_API_BASE_URL = "https://quickbooks.api.intuit.com/v3";
-    let QUICKBOOKS_API_BASE_URL_SANDBOX = "https://sandbox-quickbooks.api.intuit.com/v3";
-    let API_URL = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKS_API_BASE_URL : QUICKBOOKS_API_BASE_URL_SANDBOX;
     let url = options.path || "";
-    if (options.params) {
-        for (let key in options.params) {
-            if (key.toLowerCase() === 'minorversion') {
-                options.params.minorversion = options.params[key];
-                delete options.params[key];
+    // check if the request is for quickbooks payments or quickbooks online
+    if (url.startsWith("/payments/") || url.includes("/bank-accounts") || url.includes("/cards")) {
+        let QUICKBOOKSPAYMENTS_API_BASE_URL = "https://api.intuit.com/quickbooks/v4";
+        let QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX = "https://sandbox.api.intuit.com/quickbooks/v4";
+        let API_URL = config.get("quickbooksEnvironment") === "PRODUCTION" ? QUICKBOOKSPAYMENTS_API_BASE_URL : QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX;
+        options.url = API_URL + url;
+    } else {
+        let QUICKBOOKS_API_BASE_URL = "https://quickbooks.api.intuit.com/v3";
+        let QUICKBOOKS_API_BASE_URL_SANDBOX = "https://sandbox-quickbooks.api.intuit.com/v3";
+        let API_URL = config.get("quickbooksEnvironment") === "PRODUCTION" ? QUICKBOOKS_API_BASE_URL : QUICKBOOKS_API_BASE_URL_SANDBOX;
+        if (options.params) {
+            for (let key in options.params) {
+                if (key.toLowerCase() === 'minorversion') {
+                    options.params.minorversion = options.params[key];
+                    delete options.params[key];
+                }
             }
         }
-    }
 
-    let minorversion = options.params && options.params.minorversion;
+        let minorversion = options.params && options.params.minorversion;
 
-    if (minorversion !== undefined) {
-        options.url = concatQuery(API_URL + "/company/" + config.get("companyId") + url, "minorversion", minorversion);
-    } else {
-        options.url = concatQuery(API_URL + "/company/" + config.get("companyId") + url, "minorversion", config.get("minorversion"));
+        if (minorversion !== undefined) {
+            options.url = concatQuery(API_URL + "/company/" + config.get("companyId") + url, "minorversion", minorversion);
+        } else {
+            options.url = concatQuery(API_URL + "/company/" + config.get("companyId") + url, "minorversion", config.get("minorVersion"));
+        }
     }
     sys.logs.debug('[quickbooks] Set url: ' + options.path + "->" + options.url);
     return options;
@@ -309,7 +254,7 @@ function setAuthorization(options) {
     let authorization = (options.retry ? {} : options.authorization) || {};
     authorization = mergeJSON(authorization, {
         type: "oauth2",
-        accessToken: sys.storage.get('accessToken-QuickBooks', {decrypt:true}),
+        accessToken: sys.storage.get('quickbooks-access-token', {decrypt:true}),
         headerPrefix: "Bearer"
     });
     options.authorization = authorization;
@@ -317,23 +262,25 @@ function setAuthorization(options) {
 }
 
 function refreshQuickBooksToken() {
-    const refreshTokenFromStorage = sys.storage.get('refreshToken-QuickBooks', {decrypt:true});
-    let refreshTokenResponse = httpService.post({
-        url: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
-        headers: {
-            "Accept": "application/json",
-            "Content-Type": "application/x-www-form-urlencoded"
-        },
-        body: {"grant_type":"refresh_token","refresh_token" : refreshTokenFromStorage === undefined ? config.get("refreshToken") : refreshTokenFromStorage},
-        authorization: {
-            type: "basic",
-            username: config.get("clientId"),
-            password: config.get("clientSecret")
-        }
+    sys.utils.concurrency.lock('quickbooks-refresh-token', function() {
+        const refreshTokenFromStorage = sys.storage.get('quickbooks-refresh-token', {decrypt: true});
+        let refreshTokenResponse = httpService.post({
+            url: "https://oauth.platform.intuit.com/oauth2/v1/tokens/bearer",
+            headers: {
+                "Accept": "application/json",
+                "Content-Type": "application/x-www-form-urlencoded"
+            },
+            body: {"grant_type":"refresh_token","refresh_token" : refreshTokenFromStorage === undefined ? config.get("refreshToken") : refreshTokenFromStorage},
+            authorization: {
+                type: "basic",
+                username: config.get("clientId"),
+                password: config.get("clientSecret")
+            }
+        });
+        sys.logs.debug('[quickbooks] Refresh token response: ' + JSON.stringify(refreshTokenResponse));
+        sys.storage.put('quickbooks-access-token', refreshTokenResponse.access_token, {encrypt: true});
+        sys.storage.put('quickbooks-refresh-token', refreshTokenResponse.refresh_token, {encrypt: true});
     });
-    sys.logs.debug('[quickbooks] Refresh token response: ' + JSON.stringify(refreshTokenResponse));
-    sys.storage.put('accessToken-QuickBooks', refreshTokenResponse.access_token, {encrypt:true});
-    sys.storage.put('refreshToken-QuickBooks', refreshTokenResponse.refresh_token, {encrypt:true});
 }
 
 function mergeJSON (json1, json2) {

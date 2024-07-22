@@ -7,11 +7,5 @@
  */
 exports.verifySignature = function (body, signature) {
     let verifierToken = config.get("webhooksVerifierToken");
-
-    if (verifierToken && signature256 &&
-        !sys.utils.crypto.verifySignatureWithHmac(body, signature, verifierToken, "HmacSHA256")) {
-        return false;
-    }
-
-    return true;
+    return !(verifierToken && !sys.utils.crypto.verifySignatureWithHmac(body, signature, verifierToken, "HmacSHA256"));
 };

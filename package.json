@@ -75,12 +75,6 @@
             "name": "webhookUrl",
             "type": "label",
             "value": "@config.WEBHOOK_URL"
-        },
-        {
-            "label": "Quickbooks API URL",
-            "name": "quickbooksBaseUrl",
-            "type": "label",
-            "value": "https://quickbooks.api.intuit.com/v3"
         }
     ],
     "events": [
