@@ -2,7 +2,7 @@
  Webhooks
  ****************************************************/
 
-listeners.defaultWebhookStripe = {
+listeners.defaultWebhookQuickbooks = {
     label: 'Catch HTTP QuickBooks events',
     type: 'service',
     options: {
