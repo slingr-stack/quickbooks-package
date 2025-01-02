@@ -74,12 +74,6 @@ exports.post = function(path, httpOptions, callbackData, callbacks) {
     return httpService.post(Quickbooks(options), callbackData, callbacks);
 };
 
-exports.clearTokensFromStorage = function () {
-    sys.logs.warn("Clearing token from storage.");
-    sys.storage.remove('accessToken-QuickBooks');
-    sys.storage.remove('refreshToken-QuickBooks');
-}
-
 /****************************************************
  Private helpers
  ****************************************************/

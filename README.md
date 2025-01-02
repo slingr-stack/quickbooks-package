@@ -113,14 +113,6 @@ The package automatically handles authentication, so you don't need to worry abo
 But you do have to be aware that access and refresh tokens are stored and updated in the App Storage.
 (`accessToken-QuickBooks`, `refreshToken-QuickBooks` and `init-Quickbooks`)
 
-## Clearing tokens from storage
-
-You can clear the tokens from storage by calling the `clearTokensFromStorage` method.
-
-```js
-pkg.quickbooks.api.clearTokensFromStorage();
-```
-
 Additionally, the package handles calls to QuickBooks Online API and QuickBooks Payments API. Based on the path, the package will decide if the request has to be made to `https://quickbooks.api.intuit.com/v3` (QuickBooks Online) or `https://api.intuit.com/quickbooks/v4` (QuickBooks Payments). For example, if you want to call QuickBooks Payments, it will look the same:
 
 ```js
