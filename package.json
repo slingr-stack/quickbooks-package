@@ -1,12 +1,11 @@
 {
     "name": "quickbooks",
-    "label": "Quickbooks Package",
+    "label": "Quickbooks",
     "dependencies": [
         {
             "type": "service",
             "name": "http",
-            "version": "v1.2.6",
-            "instanceId": "shared"
+            "version": "v1.8.0"
         }
     ],
     "configuration": [
@@ -101,26 +100,6 @@
             "type": "script",
             "namespace": "api",
             "path": "/scripts/api.js"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "apiCallQuickbooks",
-            "path": "/flowSteps/apiCallQuickbooks"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "createAccountQuickbooks",
-            "path": "/flowSteps/createAccountQuickbooks"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "getAllBillsQuickbooks",
-            "path": "/flowSteps/getAllBillsQuickbooks"
-        },
-        {
-            "type": "flowStep",
-            "namespace": "createCustomerQuickbooks",
-            "path": "/flowSteps/createCustomerQuickbooks"
         }
     ]
 }
