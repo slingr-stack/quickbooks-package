@@ -5,8 +5,7 @@
         {
             "type": "service",
             "name": "http",
-            "version": "v1.2.6",
-            "instanceId": "shared"
+            "version": "v1.8.0"
         }
     ],
     "configuration": [
@@ -65,12 +64,12 @@
             }
         },
         {
-            "label": "Webhooks Verifier Token",
             "name": "webhooksVerifierToken",
-            "type": "text",
-            "required": false
+            "label": "Webhooks Verifier Token",
+            "type": "text"
         },
         {
+            "name": "webhook",
             "label": "Webhook URL",
             "name": "webhookUrl",
             "type": "label",
