@@ -132,12 +132,12 @@ function setApiUri(options) {
     if (url.startsWith("/payments/") || url.includes("/bank-accounts") || url.includes("/cards")) {
         let QUICKBOOKSPAYMENTS_API_BASE_URL = "https://api.intuit.com/quickbooks/v4";
         let QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX = "https://sandbox.api.intuit.com/quickbooks/v4";
-        let API_URL = config.get("quickbooksEnvironment") === "production" ? QUICKBOOKSPAYMENTS_API_BASE_URL : QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX;
+        let API_URL = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKSPAYMENTS_API_BASE_URL : QUICKBOOKSPAYMENTS_API_BASE_URL_SANDBOX;
         options.url = API_URL + url;
     } else {
         let QUICKBOOKS_API_BASE_URL = "https://quickbooks.api.intuit.com/v3";
         let QUICKBOOKS_API_BASE_URL_SANDBOX = "https://sandbox-quickbooks.api.intuit.com/v3";
-        let API_URL = config.get("quickbooksEnvironment") === "production" ? QUICKBOOKS_API_BASE_URL : QUICKBOOKS_API_BASE_URL_SANDBOX;
+        let API_URL = config.get("quickBooksEnvironment") === "PRODUCTION" ? QUICKBOOKS_API_BASE_URL : QUICKBOOKS_API_BASE_URL_SANDBOX;
         if (options.params) {
             for (let key in options.params) {
                 if (key.toLowerCase() === 'minorversion') {

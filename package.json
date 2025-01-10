@@ -44,11 +44,11 @@
                 "possibleValues": [
                     {
                         "label": "Sandbox",
-                        "name": "sandbox"
+                        "name": "SANDBOX"
                     },
                     {
                         "label": "Production",
-                        "name": "production"
+                        "name": "PRODUCTION"
                     }
                 ]
             }
