@@ -6,7 +6,8 @@ let httpReference = dependencies.http;
 
 let httpDependency = {
     get: httpReference.get,
-    post: httpReference.post
+    post: httpReference.post,
+    delete: httpReference.delete,
 };
 
 let httpService = {};
@@ -72,6 +73,20 @@ exports.get = function(path, httpOptions, callbackData, callbacks) {
 exports.post = function(path, httpOptions, callbackData, callbacks) {
     let options = checkHttpOptions(path, httpOptions);
     return httpService.post(Quickbooks(options), callbackData, callbacks);
+};
+
+/**
+ * Sends an HTTP DELETE request to the specified URL with the provided HTTP options.
+ *
+ * @param {string} path         - The path to send the DELETE request to.
+ * @param {object} httpOptions  - The options to be included in the DELETE request check http-service documentation.
+ * @param {object} callbackData - Additional data to be passed to the callback functions. [optional]
+ * @param {object} callbacks    - The callback functions to be called upon completion of the DELETE request. [optional]
+ * @return {object}             - The response of the DELETE request.
+ */
+exports.delete = function(path, httpOptions, callbackData, callbacks) {
+    let options = checkHttpOptions(path, httpOptions);
+    return httpService.delete(Quickbooks(options), callbackData, callbacks);
 };
 
 /****************************************************
