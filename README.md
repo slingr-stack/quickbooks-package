@@ -86,7 +86,7 @@ This is the URL webhooks can be sent. You need to configure this URL in the webh
 
 ## HTTP requests
 
-You can make `GET` and `POST` requests to the [QuickBooks API](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account) like this:
+You can make `GET`, `POST`, and `DELETE` requests to the [QuickBooks API](https://developer.intuit.com/app/developer/qbo/docs/api/accounting/all-entities/account) like this:
 
 ```js
 let startPosition = 1;
@@ -104,6 +104,15 @@ let response = pkg.quickbooks.api.post({
  path: '/invoice',
  params: { operation: existingQbInvoice ? 'update' : 'create' },
  body: requestBody
+});
+```
+
+```js
+let response = pkg.quickbooks.api.delete({
+  path: `/customers/${customerId}/cards/${cardId}`,
+  headers: {
+    'request-Id': requestId
+  }
 });
 ```
 
